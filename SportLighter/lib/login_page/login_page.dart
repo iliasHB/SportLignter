@@ -1,11 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dev_assessment/dashboard_page.dart';
+import 'package:flutter_dev_assessment/service/firebase_auth.dart';
+
+import 'controller/login_controller.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
   final _signInFormKey = GlobalKey<FormState>();
-  TextEditingController email_phoneNoController = TextEditingController();
-  TextEditingController pwdController = TextEditingController();
+
+  LoginController controller = LoginController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +24,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                    controller: email_phoneNoController,
+                    controller: controller.email_phoneNo,
                     decoration: InputDecoration(
                       hintText: '',
                       labelText: 'Email/PhoneNo',
@@ -32,7 +36,7 @@ class LoginPage extends StatelessWidget {
                       return null;
                     }),
                 TextFormField(
-                    controller: pwdController,
+                    controller: controller.pwd,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'password',
@@ -52,7 +56,7 @@ class LoginPage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton.icon(
                           onPressed: () {
-                            handleSignIn(context);
+                            handleLogIn(context);
                           },
                           icon: Icon(Icons.input),
                           label: Text('Login')),
@@ -76,10 +80,15 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void handleSignIn(BuildContext context) async {
+  void handleLogIn(BuildContext context) async {
+    final password = controller.pwd.text;
+    final email_phone = controller.email_phoneNo.text;
     if (_signInFormKey.currentState!.validate()) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => DashboardPage()));
+      print('here........');
+      controller.createUserLogin(password: password, email_phone: email_phone, context: context);
+
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => DashboardPage()));
     }
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_dev_assessment/interest_page.dart';
 import 'package:flutter_dev_assessment/register_page/view/register_page.dart';
 
 import 'dashboard_page.dart';
-import 'login_page.dart';
+import 'login_page/login_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dev_assessment/interest_page.dart';
 
 import '../controller/register_controller.dart';
+import '../model/register_model.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -21,6 +22,19 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                TextFormField(
+                  controller: controller.name,
+                  decoration: InputDecoration(
+                    hintText: '',
+                    labelText: 'Fullname',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "name is empty";
+                    }
+                    return null;
+                  },
+                ),
                 TextFormField(
                   controller: controller.email,
                   decoration: InputDecoration(
@@ -108,10 +122,17 @@ class RegisterPage extends StatelessWidget {
   }
 
   void handleRegister(BuildContext context) async {
+
+    final name = controller.name.text;
+    final phoneNo = controller.phoneNo.text;
+    final email = controller.email.text;
+    final password = controller.retype_pwd.text;
+    final user = createUserModel(phoneNo: phoneNo, password: password, email: email, name: name, datetime: DateTime.now());
     if (_registerFormKey.currentState!.validate()) {
-      controller.userRegister(controller.email.text, controller.retype_pwd.text);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => InterestPage()));
+      controller.userRegister(email, password, context);
+      controller.createUser(user);
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => InterestPage()));
     }
   }
   

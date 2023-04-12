@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dev_assessment/register_page/model/register_model.dart';
 import 'package:flutter_dev_assessment/utils/appBarHaader_util.dart';
 import 'package:flutter_dev_assessment/utils/app_decoration.dart';
-
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -16,12 +17,9 @@ class _DashboardPageState extends State<DashboardPage> {
   final ScrollController _homeController = ScrollController();
 
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Buddies',
-      style: optionStyle,
-    ),
+    BuddiesPage(),
     Text(
       'Index 1: Discovery',
       style: optionStyle,
@@ -43,35 +41,32 @@ class _DashboardPageState extends State<DashboardPage> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.group),
-            label: 'Buddies',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.compass),
-            label: 'Discovery',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.profile_circled),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[900],
-        unselectedItemColor: Colors.grey,
-        unselectedLabelStyle: TextStyle(color: Colors.grey),
-        onTap: _onItemTapped
-      ),
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.group),
+              label: 'Buddies',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.compass),
+              label: 'Discovery',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.profile_circled),
+              label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue[900],
+          unselectedItemColor: Colors.grey,
+          unselectedLabelStyle: TextStyle(color: Colors.grey),
+          onTap: _onItemTapped),
     );
   }
-
 }
-
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -136,8 +131,7 @@ class ProfilePage extends StatelessWidget {
                 child: Text(
                   'Football | Long Tennis | Cricket | Rugby | Brandy | Basketball',
                   textAlign: TextAlign.center,
-                  style:
-                  TextStyle(color: Colors.black, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               ),
               SizedBox(
@@ -246,8 +240,7 @@ class ProfilePage extends StatelessWidget {
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(5)),
-                      child: Icon(Icons.camera_alt,
-                          color: Colors.black),
+                      child: Icon(Icons.camera_alt, color: Colors.black),
                     ),
                   ),
                   Container(
@@ -255,8 +248,7 @@ class ProfilePage extends StatelessWidget {
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade300),
                         borderRadius: BorderRadius.circular(5)),
-                    child: Icon(Icons.bookmark_border,
-                        color: Colors.black),
+                    child: Icon(Icons.bookmark_border, color: Colors.black),
                   ),
                   const SizedBox(
                     height: 15,
@@ -268,138 +260,129 @@ class ProfilePage extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.center,
-                child: Text('Interest', textAlign: TextAlign.center,
-                  style:
-                  TextStyle(color: Colors.black, fontSize: 20),),
+                child: Text(
+                  'Interest',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.all(20.0),
-                        padding: EdgeInsets.all(5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.sports_baseball),
-                                Text('Football'),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: (){},
-                                icon: Icon(Icons.clear_rounded))
+                            Icon(Icons.sports_baseball),
+                            Text('Football'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.clear_rounded))
+                      ],
+                    ),
+                  ))
                 ],
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
-                        padding: EdgeInsets.all(5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin:
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.sports_basketball_rounded),
-                                Text('Basketball'),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: (){},
-                                icon: Icon(Icons.clear_rounded))
+                            Icon(Icons.sports_basketball_rounded),
+                            Text('Basketball'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.clear_rounded))
+                      ],
+                    ),
+                  ))
                 ],
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
-                        padding: EdgeInsets.all(5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin:
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.sports_volleyball),
-                                Text('Volley ball'),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: (){},
-                                icon: Icon(Icons.clear_rounded))
+                            Icon(Icons.sports_volleyball),
+                            Text('Volley ball'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.clear_rounded))
+                      ],
+                    ),
+                  ))
                 ],
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
-                        padding: EdgeInsets.all(5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin:
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.sports_rugby),
-                                Text('Rugby'),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: (){},
-                                icon: Icon(Icons.clear_rounded))
+                            Icon(Icons.sports_rugby),
+                            Text('Rugby'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.clear_rounded))
+                      ],
+                    ),
+                  ))
                 ],
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
-                        padding: EdgeInsets.all(5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin:
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.sports_baseball_outlined),
-                                Text('Long Tennis'),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: (){},
-                                icon: Icon(Icons.clear_rounded))
+                            Icon(Icons.sports_baseball_outlined),
+                            Text('Long Tennis'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(
+                            onPressed: () {}, icon: Icon(Icons.clear_rounded))
+                      ],
+                    ),
+                  ))
                 ],
               ),
             ],
@@ -407,13 +390,17 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (){},
+        onPressed: () {},
         child: Icon(Icons.add),
       ),
     );
   }
-}
 
+  Stream<List<createUserModel>> readUsers() => FirebaseFirestore.instance
+      .collection('users')
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) => createUserModel.fromJson(doc.data())).toList());
+}
 
 class Setting extends StatelessWidget {
   const Setting({Key? key}) : super(key: key);
@@ -465,8 +452,7 @@ class Setting extends StatelessWidget {
                 child: Text(
                   'Football | Long Tennis | Cricket | Rugby | Brandy | Basketball',
                   textAlign: TextAlign.center,
-                  style:
-                  TextStyle(color: Colors.black, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               ),
               SizedBox(
@@ -496,8 +482,7 @@ class Setting extends StatelessWidget {
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(5)),
-                      child: Icon(Icons.camera_alt,
-                          color: Colors.black),
+                      child: Icon(Icons.camera_alt, color: Colors.black),
                     ),
                   ),
                   Container(
@@ -505,114 +490,102 @@ class Setting extends StatelessWidget {
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey.shade300),
                         borderRadius: BorderRadius.circular(5)),
-                    child: Icon(Icons.bookmark_border,
-                        color: Colors.black),
+                    child: Icon(Icons.bookmark_border, color: Colors.black),
                   ),
                 ],
               ),
               const SizedBox(
                 height: 10,
               ),
-             Row(
-               children: [
-                 Expanded(
-                     child: Container(
-                       margin: EdgeInsets.all(20.0),
-                       padding: EdgeInsets.all(5.0),
-                       decoration: AppDecoration.interestDecoration,
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Row(
-                             children: [
-                               Icon(Icons.lock_outline_rounded),
-                               Text('Change Password'),
-                             ],
-                           ),
-                           IconButton(
-                               onPressed: (){},
-                               icon: Icon(Icons.edit))
-                         ],
-                       ),
-
-                     )
-                 )
-               ],
-             ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
-                        padding: EdgeInsets.all(5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.email_outlined),
-                                Text('Update Email'),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: (){},
-                                icon: Icon(Icons.edit))
+                            Icon(Icons.lock_outline_rounded),
+                            Text('Change Password'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                      ],
+                    ),
+                  ))
                 ],
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
-                        padding: EdgeInsets.all(5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin:
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.perm_identity),
-                                Text('Update Username'),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: (){},
-                                icon: Icon(Icons.edit))
+                            Icon(Icons.email_outlined),
+                            Text('Update Email'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                      ],
+                    ),
+                  ))
                 ],
               ),
               Row(
                 children: [
                   Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
-                        padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 5.0),
-                        decoration: AppDecoration.interestDecoration,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin:
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
+                    padding: EdgeInsets.all(5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Icon(Icons.logout),
-                                Text('Logout'),
-                              ],
-                            ),
-
+                            Icon(Icons.perm_identity),
+                            Text('Update Username'),
                           ],
                         ),
-
-                      )
-                  )
+                        IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                      ],
+                    ),
+                  ))
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: Container(
+                    margin:
+                        EdgeInsets.only(right: 20.0, left: 20.0, bottom: 20.0),
+                    padding:
+                        EdgeInsets.only(top: 20.0, bottom: 20.0, left: 5.0),
+                    decoration: AppDecoration.interestDecoration,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.logout),
+                            Text('Logout'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ))
                 ],
               )
             ],
@@ -625,4 +598,40 @@ class Setting extends StatelessWidget {
 
 
 
+class BuddiesPage extends StatelessWidget {
+  const BuddiesPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBarHeader(title: 'Buddies'),
+      body: StreamBuilder<List<createUserModel>>(
+        stream: readUsers(),
+        builder: (context, snapshot) {
+          if(snapshot.hasError){
+            return Center(child: Text('Something went wrong! $snapshot'),);
+          }else if (snapshot.hasData){
+            final users = snapshot.data!;
+            return ListView(
+              children: users.map(buildUser).toList(),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator(),);
+          }
+        },
+      ),
+    );
+  } 
+  Widget buildUser(createUserModel user) => ListTile(
+    leading: CircleAvatar(
+      child: Text('me'),
+    ),
+    title: Text(user.name),
+    subtitle: Text(user.email),
+  );
+  Stream<List<createUserModel>> readUsers() => FirebaseFirestore.instance
+      .collection('users')
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) => createUserModel.fromJson(doc.data())).toList());
+}
 
