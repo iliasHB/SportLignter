@@ -23,6 +23,7 @@ class RegisterController {
     user.id = docUser.id;
     final json = user.toJson();
     await docUser.set(json);
+    //EmailAuthProvider.getCredential(email: 'email', password: 'password');
   }
 
   // void createUser(

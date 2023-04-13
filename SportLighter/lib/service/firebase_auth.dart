@@ -1,20 +1,24 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dev_assessment/dashboard_page.dart';
 
 import '../otp_page.dart';
+import '../register_page/model/register_model.dart';
+import '../utils/dialogbox.dart';
 
 class FirebaseAuthentication {
   final FirebaseAuth _auth;
   FirebaseAuthentication(this._auth);
+
   Future<void> RegisterWithEmail({
     required String email,
     required String password,
     required BuildContext context,
   }) async {
     try {
-      // if (!_auth.currentUser!.emailVerified) {
-      //   await verifyUserEmail(context);
-      // }
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       await verifyUserEmail(context);
@@ -31,12 +35,61 @@ class FirebaseAuthentication {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       if (!_auth.currentUser!.emailVerified) {
-        await verifyUserEmail(context);
+        showSnackBar(
+            context, 'User does not exist!'); //await verifyUserEmail(context);
+      } else {
+        FirebaseFirestore.instance
+            .collection('users')
+            .where('email', isEqualTo: email)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            // Navigator.push(
+            //     context, MaterialPageRoute(builder: (context) => DashboardPage(data: documentSnapshot.data())));
+            return createUserModel.fromJson(documentSnapshot.data());
+            //print('Document data: ${documentSnapshot.data()}');
+          } else {
+            print('Document does not exist on the database');
+          }
+
+        } as FutureOr Function(QuerySnapshot<Map<String, dynamic>> value));
       }
       //
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message);
     }
+  }
+
+  Future<void> UpdateUserEmail({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    try {
+      //EmailAuthProvider.credential(email: email, password: password);
+      _auth.currentUser!.updateEmail(email);
+      _auth.currentUser!.updatePassword(password);
+      //await verifyUserEmail(context);
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message);
+    }
+  }
+
+  // static void UserSignOut({required BuildContext context}) async {
+  // try {
+  //       _auth.signOut();
+  //     } on FirebaseAuthException catch (e) {
+  //       showSnackBar(context, e.message);
+  //     }
+  // }
+  Future<void> UserSignOut({
+    required BuildContext context,
+  }) async {
+    //try {
+    await _auth.signOut();
+    // } on FirebaseAuthException catch (e) {
+    //   showSnackBar(context, e.message);
+    // }
   }
 
   Future<void> LoginWithPhoneNo(
@@ -80,26 +133,4 @@ class FirebaseAuthentication {
       showSnackBar(context, e.message);
     }
   }
-}
-
-void callOtpDialog({
-  required BuildContext context,
-  required TextEditingController codeController,
-  required VoidCallback onPressed,
-}) {
-  showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-            title: Text('Enter Otp'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: codeController,
-                )
-              ],
-            ),
-            actions: [TextButton(onPressed: onPressed, child: Text('Verify'))],
-          ));
 }
