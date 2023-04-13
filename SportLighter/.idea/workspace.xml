@@ -34,11 +34,14 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/android/app" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\.hb_prjt\flutter-development-assessment\SportLighter\android\app" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\.hb_prjt\flutter-development-assessment\SportLighter\lib" />
       <recent name="C:\.hb_prjt\flutter-development-assessment\SportLighter\lib\register_page\login_page" />

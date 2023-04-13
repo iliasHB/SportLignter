@@ -11,7 +11,12 @@ class LoginController {
       {required String password,
       required String email_phone,
       required BuildContext context}) {
-    FirebaseAuthentication(FirebaseAuth.instance).LoginWithEmail(
-        email: email_phone, password: password, context: context);
-  }
+    if (email_phoneNo.text.contains('@')){
+      FirebaseAuthentication(FirebaseAuth.instance).LoginWithEmail(
+          email: email_phone, password: password, context: context);
+    } else {
+      FirebaseAuthentication(FirebaseAuth.instance).LoginWithPhoneNo(email_phone, context);
+    }
+    }
+
 }

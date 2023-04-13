@@ -63,10 +63,10 @@ class LoginPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text("New to Spotlighter?"),
+                const Text("New to Spotlighter?"),
                 OutlinedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/registerpage');
@@ -84,9 +84,7 @@ class LoginPage extends StatelessWidget {
     final password = controller.pwd.text;
     final email_phone = controller.email_phoneNo.text;
     if (_signInFormKey.currentState!.validate()) {
-      print('here........');
       controller.createUserLogin(password: password, email_phone: email_phone, context: context);
-
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => DashboardPage()));
     }
