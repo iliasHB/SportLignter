@@ -13,6 +13,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Colors.white60,
       body: Align(
         alignment: Alignment.center,
         child: Container(
@@ -22,45 +23,87 @@ class LoginPage extends StatelessWidget {
             key: _signInFormKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextFormField(
-                    controller: controller.email_phoneNo,
-                    decoration: InputDecoration(
-                      hintText: '',
-                      labelText: 'Email/PhoneNo',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Email/phoneNo is empty";
-                      }
-                      return null;
-                    }),
-                TextFormField(
-                    controller: controller.pwd,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'password',
-                      labelText: 'Password',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Password is empty";
-                      }
-                      return null;
-                    }),
-                SizedBox(
-                  height: 20,
+                Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'SportLighter',
+                              style: TextStyle(
+                                  fontSize: 35,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0, bottom: 50),
+                          child: Text(
+                              'Flutter Development Assessment\nLoginIn here'),
+                        ),
+                      ],
+                    )),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[300],
+                  ),
+
+                  child: TextFormField(
+                      controller: controller.email_phoneNo,
+                      decoration: const InputDecoration(
+                        hintText: '',
+                        labelText: 'Email/PhoneNo',
+                        border: InputBorder.none
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email/phoneNo is empty";
+                        }
+                        return null;
+                      }),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color:  Colors.grey[300],
+                  ),
+                  child: TextFormField(
+                      controller: controller.pwd,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        hintText: 'password',
+                        labelText: 'Password',
+                          border: InputBorder.none
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Password is empty";
+                        }
+                        return null;
+                      }),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                          onPressed: () {
-                            handleLogIn(context);
+                    ElevatedButton.icon(
+                        onPressed: () {
+                          handleLogIn(context);
+                        },
+                        icon: Icon(Icons.input),
+                        label: Text('Login')),
+                    SizedBox(width: 20,),
+                    OutlinedButton(
+                          onPressed: (){
+                            Navigator.pushNamed(context, '/forgotpasswordpage');
                           },
-                          icon: Icon(Icons.input),
-                          label: Text('Login')),
-                    ),
+                          child: Text('Forgot Password')),
                   ],
                 ),
                 const SizedBox(

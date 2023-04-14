@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dev_assessment/dashboard_page.dart';
+import 'package:flutter_dev_assessment/register_page/view/register_page.dart';
+import 'package:get/get.dart';
 
 import '../otp_page.dart';
 import '../register_page/model/register_model.dart';
@@ -16,12 +18,46 @@ class FirebaseAuthentication {
   Future<void> RegisterWithEmail({
     required String email,
     required String password,
-    required BuildContext context,
+    required BuildContext context, required String username,
   }) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      await verifyUserEmail(context);
+      ConfirmEmailVerification(
+          context: context,
+          message:
+              'A verification link has been sent to this email $email. Please verify your email before you proceed}',
+          onPressed: () {
+            ConfirmEmail(email: email, password: password, context: context, username: username);
+          });
+      // if (!_auth.currentUser!.emailVerified) {
+      //   await verifyUserEmail(context);
+      // } else {
+      //   Navigator.pushNamed(context, '/registerpage2');
+        //Navigator.push(context, Mater)
+      //}
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message);
+    }
+  }
+
+  Future<void> ConfirmEmail({
+    required String email,
+    required String password,
+    required BuildContext context, required String username,
+  }) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (!_auth.currentUser!.emailVerified) {
+        showSnackBar(context, 'Email has not been verify. Please verify your email!');
+        await verifyUserEmail(context); //await verifyUserEmail(context);
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RegisterpageStep2(email: email, password: password, username:username)));
+      }
+      //
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message);
     }
@@ -35,24 +71,14 @@ class FirebaseAuthentication {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       if (!_auth.currentUser!.emailVerified) {
-        showSnackBar(
-            context, 'User does not exist!'); //await verifyUserEmail(context);
+        showSnackBar(context, 'User does not exist. Please Register!');
+        await verifyUserEmail(context); //await verifyUserEmail(context);
       } else {
-        FirebaseFirestore.instance
-            .collection('users')
-            .where('email', isEqualTo: email)
-            .get()
-            .then((DocumentSnapshot documentSnapshot) {
-          if (documentSnapshot.exists) {
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => DashboardPage(data: documentSnapshot.data())));
-            return createUserModel.fromJson(documentSnapshot.data());
-            //print('Document data: ${documentSnapshot.data()}');
-          } else {
-            print('Document does not exist on the database');
-          }
-
-        } as FutureOr Function(QuerySnapshot<Map<String, dynamic>> value));
+        await _auth.fetchSignInMethodsForEmail(email);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DashboardPage(email: email)));
       }
       //
     } on FirebaseAuthException catch (e) {
@@ -62,14 +88,35 @@ class FirebaseAuthentication {
 
   Future<void> UpdateUserEmail({
     required String email,
+    required BuildContext context,
+  }) async {
+    try {
+      _auth.currentUser!.updateEmail(email);
+      showSnackBar(context, 'Email verification sent!');
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message);
+    }
+  }
+
+  Future<void> ChangeUserPassword({
     required String password,
     required BuildContext context,
   }) async {
     try {
-      //EmailAuthProvider.credential(email: email, password: password);
-      _auth.currentUser!.updateEmail(email);
       _auth.currentUser!.updatePassword(password);
-      //await verifyUserEmail(context);
+      showSnackBar(context, 'Email verification sent!');
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message);
+    }
+  }
+
+  Future<void> ForgotPassword({
+    required String email,
+    required BuildContext context,
+  }) async {
+    try {
+      _auth.sendPasswordResetEmail(email: email);
+      showSnackBar(context, 'Email verification sent!');
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message);
     }
@@ -85,11 +132,7 @@ class FirebaseAuthentication {
   Future<void> UserSignOut({
     required BuildContext context,
   }) async {
-    //try {
     await _auth.signOut();
-    // } on FirebaseAuthException catch (e) {
-    //   showSnackBar(context, e.message);
-    // }
   }
 
   Future<void> LoginWithPhoneNo(
@@ -129,6 +172,7 @@ class FirebaseAuthentication {
     try {
       _auth.currentUser!.sendEmailVerification();
       showSnackBar(context, 'Email verification sent!');
+      //Navigator.pushNamed(context, '/registerpage2');
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message);
     }

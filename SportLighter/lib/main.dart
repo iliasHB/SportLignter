@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dev_assessment/firebase_options.dart';
 import 'package:flutter_dev_assessment/interest_page.dart';
+import 'package:flutter_dev_assessment/register_page/view/forgot_password_page.dart';
 import 'package:flutter_dev_assessment/register_page/view/register_page.dart';
 
 import 'dashboard_page.dart';
@@ -27,8 +28,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (BuildContext context) => LoginPage(),
         '/registerpage': (BuildContext context) => RegisterPage(),
+        '/registerpage2': (BuildContext context) => RegisterpageStep2(email: '', password: '', username: '',),
+        '/forgotpasswordpage': (BuildContext context) => ForgotPasswordPage(),
         '/interestpage': (BuildContext context) => InterestPage(),
-        '/dashboardpage': (BuildContext context) => const DashboardPage(),
+        '/dashboardpage': (BuildContext context) => const DashboardPage(email: '',),
       }
       //home: const MyHomePage(title: ''),
     );

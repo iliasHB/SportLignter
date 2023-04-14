@@ -15,8 +15,15 @@ void callOtpDialog({
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  controller: codeController,
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[300],
+                  ),
+                  child: TextField(
+                    controller: codeController,
+                  ),
                 )
               ],
             ),
@@ -24,34 +31,116 @@ void callOtpDialog({
           ));
 }
 
-void callUpdateEmailDialog({
+void callUpdateEmailPhoneDialog({
   required BuildContext context,
-  required TextEditingController emailController,
-  required TextEditingController pwdController,
+  TextEditingController? emailController,
+  VoidCallback? onPressed,
+  bool? isEmail,
+  TextEditingController? pwdController,
+}) {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController retypepwdController = TextEditingController();
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+            title: isEmail! ? Text('Enter Email') : Text('Enter Password'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Form(
+                  key: _formKey,
+                  child: isEmail
+                      ? Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[300],
+                          ),
+                          child: TextFormField(
+                            controller: emailController,
+                            decoration: const InputDecoration(
+                                hintText: 'Email',
+                                border: OutlineInputBorder()),
+                            validator: (email) {
+                              if (email == null || email.isEmpty) {
+                                return 'Email is empty';
+                              } else if (!email.toString().contains('@')) {
+                                return 'Email address is not valid';
+                              }
+                              return null;
+                            },
+                          ),
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: pwdController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Password',
+                                  border: OutlineInputBorder()),
+                              validator: (password) {
+                                if (password == null || password.isEmpty) {
+                                  return 'Password is empty';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              controller: retypepwdController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Retype-password',
+                                  border: OutlineInputBorder()),
+                              validator: (retypepassword) {
+                                if (retypepassword == null ||
+                                    retypepassword.isEmpty) {
+                                  return 'Password is empty';
+                                } else if (retypepassword !=
+                                    pwdController!.text) {
+                                  return 'Password id not the same';
+                                }
+                                return null;
+                              },
+                            )
+                          ],
+                        ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      onPressed;
+                    }
+                  },
+                  child: Text('Update'))
+            ],
+          ));
+}
+
+
+void ConfirmEmailVerification({
+  required BuildContext context,
+  required message,
   required VoidCallback onPressed,
 }) {
   showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-            title: Text('Enter Email'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: emailController,
-                ),
-                TextField(
-                  controller: pwdController,
-                )
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: onPressed,
-                  child: Text('Update'))
+        title: Text('Verify Email'),
+        content: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(message),
             ],
-          ));
+          ),
+        ),
+        actions: [TextButton(onPressed: onPressed, child: Text('Done'))],
+      ));
 }
 
 void callUpdateUsernameDialog({
@@ -63,19 +152,27 @@ void callUpdateUsernameDialog({
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Update Username'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
+            title: Row(
+              children: [
+                Text('Update Username'),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.black,
+                    ))
+              ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: onPressed,
-              child: Text('Update'))
-        ],
-      ));
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                ),
+              ],
+            ),
+            actions: [TextButton(onPressed: onPressed, child: Text('Update'))],
+          ));
 }
