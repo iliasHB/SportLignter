@@ -102,7 +102,7 @@ class _SettingState extends State<Setting> {
                     color: Colors.black,
                     image: DecorationImage(
                       image: NetworkImage(
-                          "https://source.unsplash.com/random?sig=1"),
+                          "https://source.unsplash.com/random?img=1"),
                       fit: BoxFit.cover,
                     ),
                   ),

@@ -30,7 +30,7 @@ class ProfilePage extends StatelessWidget {
                     color: Colors.black,
                     image: const DecorationImage(
                       image: NetworkImage(
-                          "https://source.unsplash.com/random?sig=1"),
+                          "https://source.unsplash.com/random?img=1"),
                       fit: BoxFit.cover,
                     ),
                   ),
