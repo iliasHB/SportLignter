@@ -31,7 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
     //email =  widget.email;
   }
   final List<Widget> _widgetOptions = <Widget>[
-    const BuddiesPage(),
+    BuddiesPage(),
     const Text(
       'Index 1: Discovery',
       style: optionStyle,
@@ -125,7 +125,8 @@ final nameController = TextEditingController();
 
 
 class BuddiesPage extends StatelessWidget {
-  const BuddiesPage({Key? key}) : super(key: key);
+  BuddiesPage({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {

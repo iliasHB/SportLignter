@@ -7,6 +7,7 @@ void callOtpDialog({
   required TextEditingController codeController,
   required VoidCallback onPressed,
 }) {
+  final _formKey = GlobalKey<FormState>();
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -15,14 +16,27 @@ void callOtpDialog({
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey[300],
-                  ),
-                  child: TextField(
-                    controller: codeController,
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey[300],
+                    ),
+                    child: TextFormField(
+                      controller: codeController,
+                      decoration: const InputDecoration(
+                        // hintText: 'Email',
+                          labelText: 'Email',
+                          border: InputBorder.none),
+                      validator: (otpCode) {
+                        if (otpCode == null || otpCode.isEmpty) {
+                          return 'Otpcode is empty';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                 )
               ],
@@ -42,7 +56,7 @@ void callUpdateEmailPhoneDialog({
   TextEditingController retypepwdController = TextEditingController();
   showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) => AlertDialog(
             title: isEmail! ? Text('Enter Email') : Text('Enter Password'),
             content: Column(
@@ -144,7 +158,7 @@ void ConfirmEmailVerification({
 }) {
   showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) => AlertDialog(
         title: Text('Verify Email'),
         content: Column(
@@ -155,7 +169,7 @@ void ConfirmEmailVerification({
             Text(message),
           ],
         ),
-        actions: [TextButton(onPressed: onPressed, child: Text('Done'))],
+        actions: [TextButton(onPressed: onPressed, child: const Text('Done'))],
       ));
 }
 
@@ -163,10 +177,12 @@ void callUpdateUsernameDialog({
   required BuildContext context,
   required TextEditingController nameController,
   required VoidCallback onPressed,
+
 }) {
+  final _formKey = GlobalKey<FormState>();
   showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) => AlertDialog(
             title: Row(
               children: [
@@ -184,8 +200,29 @@ void callUpdateUsernameDialog({
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  controller: nameController,
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey[300],
+                    ),
+                    child: TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                          hintText: 'Username',
+                          border: InputBorder.none),
+                      validator: (username) {
+                        if (username == null ||
+                            username.isEmpty) {
+                          return 'username is empty';
+                        }
+                        return null;
+                      },
+                    ),
+
+                  ),
                 ),
               ],
             ),

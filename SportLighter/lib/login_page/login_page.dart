@@ -44,6 +44,10 @@ class LoginPage extends StatelessWidget {
                           child: Text(
                               'Flutter Development Assessment\nLoginIn here'),
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 5.0),
+                          child: Text('Phone number login format(+234 0000000000)'),
+                        )
                       ],
                     )),
                 Container(
@@ -63,13 +67,13 @@ class LoginPage extends StatelessWidget {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Email/phoneNo is empty";
-                        }
+                        } 
                         return null;
                       }),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color:  Colors.grey[300],

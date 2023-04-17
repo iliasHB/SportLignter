@@ -12,7 +12,9 @@ import '../../utils/prefs_util.dart';
 import '../../utils/progress_dialog_utils.dart';
 
 class Setting extends StatefulWidget {
-  Setting({Key? key,}) : super(key: key);
+  Setting({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Setting> createState() => _SettingState();
@@ -29,13 +31,19 @@ class _SettingState extends State<Setting> {
   FirebaseAuth? _auth;
   PrefUtils prefUtils = PrefUtils();
   List<String>? userInterest;
-  createUserModel? userData;
+  Future<createUserModel?>? userData;
+
+  createUserModel? userRecord;
   void initState() {
     super.initState();
-    // var email = _auth?.currentUser!.email;
-    //
-    // print(">>>>> email: "+email!);
-    //getUserInterest();
+    getUserInfo();
+  }
+
+  getUserInfo() async {
+    //userMeterInfo = await prefUtils.getStringList('userMeterData');
+    var val = await prefUtils.getStr('value');
+    userData = readUser(email_phone: val);
+    setState(() {});
   }
 
   // getUserInterest() async {
@@ -55,7 +63,7 @@ class _SettingState extends State<Setting> {
       appBar: appBarHeader(title: 'Setting'),
       // backgroundColor: Colors.white,
       body: FutureBuilder<createUserModel?>(
-          future: readUser(),
+          future: userData,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
@@ -63,8 +71,9 @@ class _SettingState extends State<Setting> {
               );
             } else if (snapshot.hasData) {
               final user = snapshot.data!;
+              //print(snapshot.data!.password);
               return user == null
-                  ? Center(
+                  ? const Center(
                       child: Text('No user'),
                     )
                   : buildUser(user, context);
@@ -88,10 +97,10 @@ class _SettingState extends State<Setting> {
                 child: Container(
                   height: 100,
                   width: 100,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.black,
-                    image: const DecorationImage(
+                    image: DecorationImage(
                       image: NetworkImage(
                           "https://source.unsplash.com/random?sig=1"),
                       fit: BoxFit.cover,
@@ -100,13 +109,13 @@ class _SettingState extends State<Setting> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
                     user.name,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                     ),
@@ -114,13 +123,13 @@ class _SettingState extends State<Setting> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.only(bottom: 10.0),
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
                     user.email,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                     ),
@@ -135,10 +144,10 @@ class _SettingState extends State<Setting> {
                       style: DefaultTextStyle.of(context).style,
                       children: <TextSpan>[
                         TextSpan(
-                            text: 'ghh',//userInterest![i].toString() +'|',
-                            style: const TextStyle(
-                                color: Colors.black, fontSize: 16)),
-                        TextSpan(text: '|'),
+                            text: user.phoneNo, //userInterest![i].toString() +'|',
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16)),
+                        TextSpan(text: ''),
                       ],
                     ),
                   )
@@ -149,45 +158,42 @@ class _SettingState extends State<Setting> {
                   //   style: TextStyle(color: Colors.black, fontSize: 16),
                   // ),
                   ),
-              SizedBox(
-                height: 10,
-              ),
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40.0, vertical: 15.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: const Text(
-                      'Edit profile',
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Container(
-                      padding: const EdgeInsets.all(15.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Icon(Icons.camera_alt, color: Colors.black),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Icon(Icons.bookmark_border, color: Colors.black),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Container(
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 40.0, vertical: 15.0),
+              //       decoration: BoxDecoration(
+              //           border: Border.all(color: Colors.grey.shade300),
+              //           borderRadius: BorderRadius.circular(5)),
+              //       child: const Text(
+              //         'Edit profile',
+              //         style: TextStyle(color: Colors.black, fontSize: 20),
+              //       ),
+              //     ),
+              //     Padding(
+              //       padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              //       child: Container(
+              //         padding: const EdgeInsets.all(15.0),
+              //         decoration: BoxDecoration(
+              //             border: Border.all(color: Colors.grey.shade300),
+              //             borderRadius: BorderRadius.circular(5)),
+              //         child: Icon(Icons.camera_alt, color: Colors.black),
+              //       ),
+              //     ),
+              //     Container(
+              //       padding: const EdgeInsets.all(15.0),
+              //       decoration: BoxDecoration(
+              //           border: Border.all(color: Colors.grey.shade300),
+              //           borderRadius: BorderRadius.circular(5)),
+              //       child: Icon(Icons.bookmark_border, color: Colors.black),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(
                 height: 10,
               ),
@@ -202,7 +208,7 @@ class _SettingState extends State<Setting> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          children: [
+                          children: const [
                             Icon(Icons.lock_outline_rounded),
                             Text('Change Password'),
                           ],
@@ -306,9 +312,18 @@ class _SettingState extends State<Setting> {
                                   onPressed: () {
                                     final name = nameController.text;
                                     final docUser = FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc('8yzFWejrHOYkYjv6qPV4');
-                                    docUser.update({'name': name});
+                                        .collection('users').where('email', isEqualTo: user.email);
+                                    docUser.get().then((documentSnapshot) {
+                                      if (documentSnapshot.docs.isNotEmpty) {
+                                        documentSnapshot.docs.first.data().update('name', (value) => name);
+                                      //   setState(() {
+                                      //     userData;
+                                      //     print(userRecord!.email);
+                                      //     print(userRecord!.phoneNo);
+                                      //   });
+                                      //   return createUserModel.fromJson(userRecord!.toJson());
+                                       }
+                                    });//.update({'name': name});
                                   });
                             },
                             icon: Icon(Icons.edit))
@@ -356,27 +371,27 @@ class _SettingState extends State<Setting> {
         ],
       );
 
-  Future<createUserModel?> readUser() async {
-    var email = "abeeb.ilias@gmail.com";
-    // setState(() {
-    //   email = _auth.currentUser!.email;
-    //   print(">>>>> email: "+email);
-    // });
-    print(">>>>> email: "+email!);
+  Future<createUserModel?> readUser({required email_phone}) async {
+    print(">>>>> email: " + email_phone);
 
     return FirebaseFirestore.instance
-        .collection('users').withConverter(
-        fromFirestore: createUserModel.fromFirestore, toFirestore: (createUserModel user, _) => user.toFirestore())
-        .where('email', isEqualTo: email)
-        .get().then((documentSnapshot) {
-          if (documentSnapshot.docs.isNotEmpty){
-            var userData = documentSnapshot.docs.first.data();
-            setState(() {
-              userData;
-              print(userData.email);
-              print(userData.phoneNo);
-            });
-          }
+        .collection('users')
+        .withConverter(
+            fromFirestore: createUserModel.fromFirestore,
+            toFirestore: (createUserModel user, _) => user.toFirestore())
+        .where(email_phone.toString().contains('@') ? 'email' : 'phoneNo',
+            isEqualTo: email_phone)
+        .get()
+        .then((documentSnapshot) {
+      if (documentSnapshot.docs.isNotEmpty) {
+        userRecord = documentSnapshot.docs.first.data();
+        setState(() {
+          userData;
+          print(userRecord!.email);
+          print(userRecord!.phoneNo);
+        });
+        return createUserModel.fromJson(userRecord!.toJson());
+      }
     });
 
     //var email = '6cRhMG70Hdc4opPhk7ro';//
@@ -386,7 +401,7 @@ class _SettingState extends State<Setting> {
     // if (snapshots.exists) {
     //   return createUserModel.fromJson(snapshots.data()!);
     // }
-///-----------------------------
+    ///-----------------------------
 
     //     .then((DocumentSnapshot documentSnapshot) {
     //   if (documentSnapshot.exists) {

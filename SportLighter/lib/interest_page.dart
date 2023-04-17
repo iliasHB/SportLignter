@@ -301,9 +301,8 @@ class _InterestPageState extends State<InterestPage> {
                           final user = createUserModel(
                               phoneNo: widget.phoneNo,
                               password: widget.password,
-                              email: widget.email,
-                              name: widget.username,
-                              datetime: DateTime.now());
+                              email: widget.email.toLowerCase(),
+                              name: widget.username,);
                           createUser(user, context);
                         },
                         child: const Text('Continue')),

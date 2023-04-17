@@ -30,4 +30,18 @@ class PrefUtils {
     return result;
     print('SharedPreference Initialized');
   }
+
+  Future<dynamic> setStr(key, value) async {
+    final SharedPreferences prefs= await SharedPreferences.getInstance();
+    var result = prefs.setString('$key', value);
+    return result;
+    print('SharedPreference Initialized');
+  }
+
+  Future<dynamic> getStr(key) async {
+    final SharedPreferences prefs= await SharedPreferences.getInstance();
+    var result = prefs.getString('$key');
+    return result;
+    print('SharedPreference Initialized');
+  }
 }

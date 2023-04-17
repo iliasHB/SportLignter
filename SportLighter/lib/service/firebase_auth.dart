@@ -6,25 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dev_assessment/dashboard_page.dart';
 import 'package:flutter_dev_assessment/interest_page.dart';
 import 'package:flutter_dev_assessment/register_page/view/register_page.dart';
+import 'package:flutter_dev_assessment/utils/prefs_util.dart';
 import '../utils/dialogbox.dart';
 import '../utils/progress_dialog_utils.dart';
 
 class FirebaseAuthentication {
   final FirebaseAuth _auth;
   FirebaseAuthentication(this._auth);
-
+  PrefUtils prefUtils = PrefUtils();
   Future<void> RegisterWithEmail({
     required String email,
     required String password,
     required BuildContext context,
     required String username,
   }) async {
-    ProgressDialogUtils.showProgressDialog();
+    //ProgressDialogUtils.showProgressDialog();
     try {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        ProgressDialogUtils.hideProgressDialog();
+        //ProgressDialogUtils.hideProgressDialog();
         ConfirmEmailVerification(
             context: context,
             message:
@@ -39,10 +40,12 @@ class FirebaseAuthentication {
         await verifyUserEmail(context);
       });
     } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message);
       switch (e.code) {
         case "email-already-in-use":
           if (!_auth.currentUser!.emailVerified) {
-            ProgressDialogUtils.hideProgressDialog();
+            print('fdddddddddddddddddddd');
+            //ProgressDialogUtils.hideProgressDialog();
             await verifyUserEmail(context).then((value) {
               ConfirmEmailVerification(
                   context: context,
@@ -57,7 +60,8 @@ class FirebaseAuthentication {
                   });
             });
           } else {
-            ProgressDialogUtils.hideProgressDialog();
+            //ProgressDialogUtils.hideProgressDialog();
+            print('fdddddddddddddddddddd');
             ConfirmEmailVerification(
                 context: context,
                 message:
@@ -72,7 +76,7 @@ class FirebaseAuthentication {
           }
           break;
         default:
-          ProgressDialogUtils.hideProgressDialog();
+          //ProgressDialogUtils.hideProgressDialog();
           showSnackBar(context, e.message);
           break;
       }
@@ -117,6 +121,9 @@ class FirebaseAuthentication {
         showSnackBar(context, 'User does not exist. Please Register!');
         await verifyUserEmail(context); //await verifyUserEmail(context);
       } else {
+        print(_auth.currentUser!.email);
+        var emailer = _auth.currentUser!.email;
+        prefUtils.setStr("value", emailer);
         await _auth.fetchSignInMethodsForEmail(email);
         Navigator.push(
             context,
@@ -195,6 +202,8 @@ class FirebaseAuthentication {
                 PhoneAuthCredential credential = PhoneAuthProvider.credential(
                     verificationId: verificationId,
                     smsCode: codeController.text.trim());
+                var mobile = _auth.currentUser!.phoneNumber;
+                prefUtils.setStr("value", mobile);
                 await _auth.signInWithCredential(credential).then((value) {
                   isLogin
                       ? Navigator.push(

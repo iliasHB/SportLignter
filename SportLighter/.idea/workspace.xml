@@ -95,7 +95,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/lib/login_page/login_page.dart</url>
-          <line>69</line>
+          <line>73</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
