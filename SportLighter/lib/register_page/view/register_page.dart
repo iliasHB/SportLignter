@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dev_assessment/interest_page.dart';
 
 import '../../service/firebase_auth.dart';
+import '../../utils/progress_dialog_utils.dart';
 import '../controller/register_controller.dart';
 import '../model/register_model.dart';
 
@@ -113,20 +114,20 @@ class RegisterPage extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: InkWell(
-                                  onTap: (){
-                                    //handleEmailVerification(context);
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    alignment: Alignment.bottomRight,
-                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                    child: Text('Verify', style: TextStyle(color: Colors.blue)),
-                                  ),
-                                ),
-                              )
+                              // Align(
+                              //   alignment: Alignment.bottomRight,
+                              //   child: InkWell(
+                              //     onTap: (){
+                              //       //handleEmailVerification(context);
+                              //     },
+                              //     child: Container(
+                              //       margin: EdgeInsets.only(left: 5),
+                              //       alignment: Alignment.bottomRight,
+                              //       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                              //       child: Text('Verify', style: TextStyle(color: Colors.blue)),
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                         ),
@@ -193,7 +194,7 @@ class RegisterPage extends StatelessWidget {
                               handleEmailVerification(context);
                             },
                             icon: const Icon(Icons.forward),
-                            label: Text('Container')),
+                            label: Text('Continue')),
                       ),
                     ],
                   ),
@@ -213,22 +214,6 @@ class RegisterPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void handleRegister(BuildContext context) async {
-
-    final name = controller.name.text;
-    final phoneNo = controller.phoneNo.text;
-    final email = controller.email.text;
-    final password = controller.retype_pwd.text;
-    // final user = createUserModel(phoneNo: phoneNo, password: password, email: email, name: name, datetime: DateTime.now());
-    // if (_registerFormKey.currentState!.validate()) {
-    //   controller.createUser(user);
-    //   // Navigator.push(
-    //   //     context, MaterialPageRoute(builder: (context) => InterestPage()));
-    // }
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (context) => RegisterpageStep2()));
   }
 
   void handleEmailVerification(BuildContext context) {
@@ -317,7 +302,7 @@ class RegisterpageStep2 extends StatelessWidget {
                                 child: TextFormField(
                                   controller: controller.phoneNo,
                                   decoration: InputDecoration(
-                                      hintText: 'Phone number',
+                                      hintText: '+23400000000',
                                       labelText: 'Phone Number',
                                       border: InputBorder.none
                                   ),
@@ -329,20 +314,20 @@ class RegisterpageStep2 extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: InkWell(
-                                  onTap: (){
-                                    handlePhoneVerification(context);
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    alignment: Alignment.bottomRight,
-                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                    child: Text('Verify', style: TextStyle(color: Colors.blue)),
-                                  ),
-                                ),
-                              )
+                              // Align(
+                              //   alignment: Alignment.bottomRight,
+                              //   child: InkWell(
+                              //     onTap: (){
+                              //       handlePhoneVerification(context);
+                              //     },
+                              //     child: Container(
+                              //       margin: EdgeInsets.only(left: 5),
+                              //       alignment: Alignment.bottomRight,
+                              //       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                              //       child: Text('Verify', style: TextStyle(color: Colors.blue)),
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                         ),
@@ -359,7 +344,7 @@ class RegisterpageStep2 extends StatelessWidget {
                         child: ElevatedButton.icon(
                             style: ButtonStyle(padding: MaterialStatePropertyAll(EdgeInsets.all(15))),
                             onPressed: () {
-                              //handleRegister(context);
+                              handlePhoneVerification(context);
                             },
                             icon: const Icon(Icons.forward),
                             label: Text('Continue')),
@@ -388,18 +373,16 @@ class RegisterpageStep2 extends StatelessWidget {
   void handlePhoneVerification(BuildContext context) {
     final phone = controller.phoneNo.text;
     FirebaseAuthentication(FirebaseAuth.instance)
-        .LoginWithPhoneNo(phone, context);
-    final user = createUserModel(phoneNo: phone, password: password, email: email, name: username, datetime: DateTime.now());
-      createUser(user);
-      // Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => InterestPage()));
+        .LoginWithPhoneNo(phoneNo:phone, context:context, isLogin: false, email: email, password: password, username: username);
+    // final user = createUserModel(phoneNo: phone, password: password, email: email, name: username, datetime: DateTime.now());
+    //   createUser(user);
   }
-  void createUser(createUserModel user) async {
-    final docUser = FirebaseFirestore.instance.collection('users').doc();
-    user.id = docUser.id;
-    final json = user.toJson();
-    await docUser.set(json);
-    //EmailAuthProvider.getCredential(email: 'email', password: 'password');
-  }
+  // Future createUser(createUserModel user) async {
+  //   final docUser = FirebaseFirestore.instance.collection('users').doc();
+  //   user.id = docUser.id;
+  //   final json = user.toJson();
+  //   await docUser.set(json);
+  //   //EmailAuthProvider.getCredential(email: 'email', password: 'password');
+  // }
 }
 

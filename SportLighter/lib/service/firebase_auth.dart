@@ -4,12 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dev_assessment/dashboard_page.dart';
+import 'package:flutter_dev_assessment/interest_page.dart';
 import 'package:flutter_dev_assessment/register_page/view/register_page.dart';
-import 'package:get/get.dart';
-
-import '../otp_page.dart';
-import '../register_page/model/register_model.dart';
 import '../utils/dialogbox.dart';
+import '../utils/progress_dialog_utils.dart';
 
 class FirebaseAuthentication {
   final FirebaseAuth _auth;
@@ -18,44 +16,89 @@ class FirebaseAuthentication {
   Future<void> RegisterWithEmail({
     required String email,
     required String password,
-    required BuildContext context, required String username,
+    required BuildContext context,
+    required String username,
   }) async {
+    ProgressDialogUtils.showProgressDialog();
     try {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      ConfirmEmailVerification(
-          context: context,
-          message:
-              'A verification link has been sent to this email $email. Please verify your email before you proceed}',
-          onPressed: () {
-            ConfirmEmail(email: email, password: password, context: context, username: username);
-          });
-      // if (!_auth.currentUser!.emailVerified) {
-      //   await verifyUserEmail(context);
-      // } else {
-      //   Navigator.pushNamed(context, '/registerpage2');
-        //Navigator.push(context, Mater)
-      //}
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) async {
+        ProgressDialogUtils.hideProgressDialog();
+        ConfirmEmailVerification(
+            context: context,
+            message:
+                'A verification link has been sent to this email "$email". Please verify your email before you proceed',
+            onPressed: () {
+              ConfirmEmail(
+                  email: email,
+                  password: password,
+                  context: context,
+                  username: username);
+            });
+        await verifyUserEmail(context);
+      });
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message);
+      switch (e.code) {
+        case "email-already-in-use":
+          if (!_auth.currentUser!.emailVerified) {
+            ProgressDialogUtils.hideProgressDialog();
+            await verifyUserEmail(context).then((value) {
+              ConfirmEmailVerification(
+                  context: context,
+                  message:
+                      'A verification link has been sent to this email "$email". Please verify your email before you proceed',
+                  onPressed: () {
+                    ConfirmEmail(
+                        email: email,
+                        password: password,
+                        context: context,
+                        username: username);
+                  });
+            });
+          } else {
+            ProgressDialogUtils.hideProgressDialog();
+            ConfirmEmailVerification(
+                context: context,
+                message:
+                    'This "$email" is already verified. Please click done to proceed',
+                onPressed: () {
+                  ConfirmEmail(
+                      email: email,
+                      password: password,
+                      context: context,
+                      username: username);
+                });
+          }
+          break;
+        default:
+          ProgressDialogUtils.hideProgressDialog();
+          showSnackBar(context, e.message);
+          break;
+      }
     }
   }
 
   Future<void> ConfirmEmail({
     required String email,
     required String password,
-    required BuildContext context, required String username,
+    required BuildContext context,
+    required String username,
   }) async {
+    ProgressDialogUtils.showProgressDialog();
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       if (!_auth.currentUser!.emailVerified) {
-        showSnackBar(context, 'Email has not been verify. Please verify your email!');
+        showSnackBar(
+            context, 'Email has not been verify. Please verify your email!');
         await verifyUserEmail(context); //await verifyUserEmail(context);
       } else {
+        ProgressDialogUtils.hideProgressDialog();
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => RegisterpageStep2(email: email, password: password, username:username)));
+                builder: (context) => RegisterpageStep2(
+                    email: email, password: password, username: username)));
       }
       //
     } on FirebaseAuthException catch (e) {
@@ -78,7 +121,7 @@ class FirebaseAuthentication {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DashboardPage(email: email)));
+                builder: (context) => DashboardPage()));
       }
       //
     } on FirebaseAuthException catch (e) {
@@ -122,13 +165,6 @@ class FirebaseAuthentication {
     }
   }
 
-  // static void UserSignOut({required BuildContext context}) async {
-  // try {
-  //       _auth.signOut();
-  //     } on FirebaseAuthException catch (e) {
-  //       showSnackBar(context, e.message);
-  //     }
-  // }
   Future<void> UserSignOut({
     required BuildContext context,
   }) async {
@@ -136,9 +172,12 @@ class FirebaseAuthentication {
   }
 
   Future<void> LoginWithPhoneNo(
-    String phoneNo,
-    BuildContext context,
-  ) async {
+      {required String phoneNo,
+      required BuildContext context,
+      required bool isLogin,
+      required String email,
+      required String password,
+      required String username}) async {
     TextEditingController codeController = TextEditingController();
     await _auth.verifyPhoneNumber(
         phoneNumber: phoneNo,
@@ -156,8 +195,18 @@ class FirebaseAuthentication {
                 PhoneAuthCredential credential = PhoneAuthProvider.credential(
                     verificationId: verificationId,
                     smsCode: codeController.text.trim());
-                await _auth.signInWithCredential(credential);
-                Navigator.of(context).pop();
+                await _auth.signInWithCredential(credential).then((value) {
+                  isLogin
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DashboardPage()))
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InterestPage(email: email, phoneNo: phoneNo, username: username, password: password)));
+                });
               });
         }),
         codeAutoRetrievalTimeout: (String verification) {});
@@ -168,11 +217,10 @@ class FirebaseAuthentication {
         .showSnackBar(SnackBar(content: Text(message!)));
   }
 
-  verifyUserEmail(BuildContext context) async {
+  Future<void> verifyUserEmail(BuildContext context) async {
     try {
       _auth.currentUser!.sendEmailVerification();
       showSnackBar(context, 'Email verification sent!');
-      //Navigator.pushNamed(context, '/registerpage2');
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message);
     }

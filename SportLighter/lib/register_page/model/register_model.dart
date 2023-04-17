@@ -29,4 +29,25 @@ class createUserModel {
       name: json['name'],
       datetime: (json['datetime'] as Timestamp).toDate()
   );
+
+  factory createUserModel.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot, SnapshotOptions? options){
+    final data = snapshot.data();
+    return createUserModel(
+        id: data?['id'],
+        name: data?['name'],
+        email: data?['email'],
+        phoneNo: data?['phoneNo'],
+        password: data?['password'],
+        datetime: (data?['datetime'] as Timestamp).toDate(),
+    );
+
+  }
+  Map<String, dynamic> toFirestore() => {
+    'id': id,
+    'phoneNo': phoneNo,
+    'password': password,
+    'email': email,
+    'name': name,
+    'datetime': datetime
+  };
 }

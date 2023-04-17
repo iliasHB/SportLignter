@@ -12,6 +12,7 @@ class AppDecoration {
   static BoxDecoration get interestDecoration =>
       BoxDecoration(
           border: Border.all(width: 1.0, color: Colors.grey),
-          borderRadius: BorderRadius.circular(10)
+          borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
       );
 }

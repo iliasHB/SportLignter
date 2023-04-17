@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
         '/registerpage': (BuildContext context) => RegisterPage(),
         '/registerpage2': (BuildContext context) => RegisterpageStep2(email: '', password: '', username: '',),
         '/forgotpasswordpage': (BuildContext context) => ForgotPasswordPage(),
-        '/interestpage': (BuildContext context) => InterestPage(),
-        '/dashboardpage': (BuildContext context) => const DashboardPage(email: '',),
+        '/interestpage': (BuildContext context) => InterestPage(email: '', phoneNo: '', username: '', password: '',),
+        '/dashboardpage': (BuildContext context) => DashboardPage(),
       }
       //home: const MyHomePage(title: ''),
     );

@@ -60,8 +60,9 @@ void callUpdateEmailPhoneDialog({
                           child: TextFormField(
                             controller: emailController,
                             decoration: const InputDecoration(
-                                hintText: 'Email',
-                                border: OutlineInputBorder()),
+                                // hintText: 'Email',
+                                labelText: 'Email',
+                                border: InputBorder.none),
                             validator: (email) {
                               if (email == null || email.isEmpty) {
                                 return 'Email is empty';
@@ -75,33 +76,48 @@ void callUpdateEmailPhoneDialog({
                       : Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            TextFormField(
-                              controller: pwdController,
-                              decoration: const InputDecoration(
-                                  hintText: 'Password',
-                                  border: OutlineInputBorder()),
-                              validator: (password) {
-                                if (password == null || password.isEmpty) {
-                                  return 'Password is empty';
-                                }
-                                return null;
-                              },
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey[300],
+                              ),
+                              child: TextFormField(
+                                controller: pwdController,
+                                decoration: const InputDecoration(
+                                    hintText: 'Password',
+                                    border: InputBorder.none),
+                                validator: (password) {
+                                  if (password == null || password.isEmpty) {
+                                    return 'Password is empty';
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                            TextFormField(
-                              controller: retypepwdController,
-                              decoration: const InputDecoration(
-                                  hintText: 'Retype-password',
-                                  border: OutlineInputBorder()),
-                              validator: (retypepassword) {
-                                if (retypepassword == null ||
-                                    retypepassword.isEmpty) {
-                                  return 'Password is empty';
-                                } else if (retypepassword !=
-                                    pwdController!.text) {
-                                  return 'Password id not the same';
-                                }
-                                return null;
-                              },
+                            SizedBox(height: 10,),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey[300],
+                              ),
+                              child: TextFormField(
+                                controller: retypepwdController,
+                                decoration: const InputDecoration(
+                                    hintText: 'Retype-password',
+                                    border: InputBorder.none),
+                                validator: (retypepassword) {
+                                  if (retypepassword == null ||
+                                      retypepassword.isEmpty) {
+                                    return 'Password is empty';
+                                  } else if (retypepassword !=
+                                      pwdController!.text) {
+                                    return 'Password id not the same';
+                                  }
+                                  return null;
+                                },
+                              ),
                             )
                           ],
                         ),
@@ -131,13 +147,13 @@ void ConfirmEmailVerification({
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text('Verify Email'),
-        content: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(message),
-            ],
-          ),
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(message),
+          ],
         ),
         actions: [TextButton(onPressed: onPressed, child: Text('Done'))],
       ));

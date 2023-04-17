@@ -15,9 +15,16 @@ class LoginController {
       FirebaseAuthentication(FirebaseAuth.instance).LoginWithEmail(
           email: email_phone, password: password, context: context);
     } else {
-      FirebaseAuthentication(FirebaseAuth.instance)
-          .LoginWithPhoneNo(email_phone, context);
+      const SnackBar(content: Text('Email does not exist'));
     }
+      if(email_phoneNo.text.contains('+')){
+        FirebaseAuthentication(FirebaseAuth.instance)
+            .LoginWithPhoneNo(phoneNo:email_phone, context:context, isLogin: true, email: '', password: '', username: '');
+      } else {
+        const SnackBar(content: Text('Phone number does not exist'));
+      }
+
+
   }
 
   void forgotPassword({required String email, required BuildContext context}) {

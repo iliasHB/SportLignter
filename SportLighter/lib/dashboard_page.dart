@@ -14,8 +14,7 @@ import 'package:flutter_dev_assessment/utils/app_decoration.dart';
 import 'package:flutter_dev_assessment/utils/dialogbox.dart';
 
 class DashboardPage extends StatefulWidget {
-  final String email;
-  const DashboardPage({Key? key, required this.email}) : super(key: key);
+  DashboardPage({Key? key, }) : super(key: key);
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -23,11 +22,14 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
-  final ScrollController _homeController = ScrollController();
+  //final ScrollController _homeController = ScrollController();
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
+  //static get email => widget.email;
+  LevelUp() {
+    //email =  widget.email;
+  }
   final List<Widget> _widgetOptions = <Widget>[
     const BuddiesPage(),
     const Text(
@@ -35,7 +37,7 @@ class _DashboardPageState extends State<DashboardPage> {
       style: optionStyle,
     ),
     const ProfilePage(),
-    Setting(email: '')
+    Setting()
   ];
 
   void _onItemTapped(int index) {
@@ -43,27 +45,13 @@ class _DashboardPageState extends State<DashboardPage> {
       _selectedIndex = index;
     });
   }
-  Widget _listViewBody() {
-    return ListView.separated(
-        controller: _homeController,
-        itemBuilder: (BuildContext context, int index) {
-          return Center(
-            child: Text(
-              'Item $index',
-            ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => const Divider(
-          thickness: 1,
-        ),
-        itemCount: 50);
-  }
   void initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -166,7 +154,7 @@ class BuddiesPage extends StatelessWidget {
   }
 
   Widget buildUser(createUserModel user) => ListTile(
-        leading: CircleAvatar(
+        leading: const CircleAvatar(
           child: Text('me'),
         ),
         title: Text(user.name),
@@ -177,6 +165,6 @@ class BuddiesPage extends StatelessWidget {
       .collection('users')
       .snapshots()
       .map((snapshot) => snapshot.docs
-          .map((doc) => createUserModel.fromJson(doc.data()))
-          .toList());
+      .map((doc) => createUserModel.fromJson(doc.data()))
+      .toList());
 }
